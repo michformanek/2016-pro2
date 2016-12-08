@@ -29,7 +29,7 @@ public class MainWindow extends JFrame{
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			gameBoard.draw(g);
+			gameBoard.drawAndDetectCollisions(g);
 			
 		}
 	}
@@ -57,10 +57,14 @@ public class MainWindow extends JFrame{
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//TODO kick the bird - nakopni ptáka - metoda kickTheBird
-				//System.out.println("tisk");
-				gameBoard.kickTheBird();
-			}
+				if(e.getButton() == MouseEvent.BUTTON3){
+					gameBoard.reset();
+					x= 0;
+				}else{
+					gameBoard.kickTheBird();
+					}
+				}
+			
 		});
 		
 		Timer t = new Timer(20, e->{//jak èasto se timer spouští v ms

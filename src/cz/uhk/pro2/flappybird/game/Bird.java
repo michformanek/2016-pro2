@@ -2,6 +2,8 @@ package cz.uhk.pro2.flappybird.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 public class Bird implements TickAware{
 	//fyzika
@@ -36,6 +38,11 @@ public class Bird implements TickAware{
 		g.drawString(viewportX +", "+(int)viewportY, viewportX,(int)viewportY);
 	}
 	
+	public boolean collidesWithRectangle(final int x, final int y, final int w, final int h){
+		Ellipse2D.Float birdBoundary = new Ellipse2D.Float(viewportX-Tile.SIZE/2, (int)viewportY-Tile.SIZE-2, Tile.SIZE,Tile.SIZE); // TODO Vytvaret birdBoundary pri ticku
+		return birdBoundary.intersects(x, y, w, h);
+	}
+	
 	@Override
 	public void tick(long ticksSinceStart) {
 		viewportY +=velocityY;
@@ -44,6 +51,12 @@ public class Bird implements TickAware{
 		}else{
 			velocityY=koefDown;//ptak zacne padat
 		}
+	}
+	
+	public void reset(){
+		viewportX = 100;
+		viewportY = 100;
+		velocityY = Bird.koefDown;
 	}
 
 }

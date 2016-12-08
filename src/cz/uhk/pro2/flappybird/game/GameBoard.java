@@ -9,6 +9,7 @@ public class GameBoard implements TickAware{
 	int shiftX; // o kolik pixelu se svet posunul
 	int widthPix;//sirka hraci plochy
 	Bird bird; //herní pták
+	boolean gameOver; //true pokud doslo ke kolizi a hra ma skoncit
 	
 	public GameBoard(){
 		//TODO jen testovaci data, nutno udelat nacitani dat ze souboru
@@ -20,7 +21,7 @@ public class GameBoard implements TickAware{
 	
 	public GameBoard(final Tile[][] tiles){
 		this.tiles = tiles;
-		bird = new Bird(100, 100); //TODO umístit do støedu okna?
+		reset();
 	}
 	public void setWidthPix(int widthPix) {
 		this.widthPix = widthPix;
@@ -35,7 +36,7 @@ public class GameBoard implements TickAware{
 	 * 
 	 * @param g
 	 */
-	public void draw(Graphics g){
+	public void drawAndDetectCollisions(Graphics g){
 		//j souradnice prvni drazdice vlevo, kterou je potreba kreslit
 		int minJ = shiftX/Tile.SIZE;
 		//pocet dlazdic na sirku, kolik je nutno kreslit do viewportu
@@ -53,7 +54,13 @@ public class GameBoard implements TickAware{
 					int viewportX=j*Tile.SIZE-shiftX;
 					int viewportY=i*Tile.SIZE;
 					t.draw(g, viewportX,viewportY);
-					
+					//otestujeme kolize dlazdice s ptakem
+					if (t instanceof WallTile) {
+						//je to zeï! Hurray!
+						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
+							gameOver = true; //doslo ke kolizi, hra ma zkonèit
+						}
+					}
 				}
 			}
 		}
@@ -64,13 +71,21 @@ public class GameBoard implements TickAware{
 
 	@Override
 	public void tick(long ticksSinceStart) {
+		if(!gameOver){
 		//s každým tikem ve høe posuneme hru o jeden pixel
 		//tj. poèet ticku a pixelu se rovnají
 		shiftX=(int)ticksSinceStart;
 		
 		//TODO dáme vìdìt ptákovi, že hodiny tickly
 		bird.tick(ticksSinceStart);
+		}else {
+			//hra stoji na miste
+		}
 	}
 	
+	public void reset(){
+		gameOver = false;
+		bird = new Bird(100, 100);
+	}
 	
 }

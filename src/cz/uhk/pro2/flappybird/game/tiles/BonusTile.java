@@ -2,9 +2,9 @@ package cz.uhk.pro2.flappybird.game.tiles;
 
 import java.awt.Image;
 
-public class WallTile extends AbstractTile{
+public class BonusTile extends AbstractTile{
 
-	public WallTile(Image image) {
+	public BonusTile(Image image) {
 		super(image);
 	}
 

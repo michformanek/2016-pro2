@@ -13,7 +13,7 @@ public class GameBoard implements TickAware{
 	public GameBoard(){
 		//TODO jen testovaci data, nutno udelat nacitani dat ze souboru
 		tiles = new Tile[20][20];
-		tiles[2][1] =new WallTile();
+		//tiles[2][1] =new WallTile();
 		
 		bird = new Bird(100, 100); //TODO umístit do støedu okna?
 	}

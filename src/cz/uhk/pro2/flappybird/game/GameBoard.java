@@ -11,17 +11,19 @@ public class GameBoard implements TickAware{
 	int widthPix;//sirka hraci plochy
 	Bird bird; //herní pták
 	boolean gameOver; //true pokud doslo ke kolizi a hra ma skoncit
+	Image imageOfTheBird;
 	
 	public GameBoard(){
 		//TODO jen testovaci data, nutno udelat nacitani dat ze souboru
 		tiles = new Tile[20][20];
 		//tiles[2][1] =new WallTile();
 		
-		bird = new Bird(100, 100); //TODO umístit do støedu okna?
+		bird = new Bird(100, 100,imageOfTheBird); //TODO umístit do støedu okna?
 	}
 	
-	public GameBoard(final Tile[][] tiles){
+	public GameBoard(final Tile[][] tiles, Image imageOfTheBird){
 		this.tiles = tiles;
+		this.imageOfTheBird = imageOfTheBird;
 		reset();
 	}
 	public void setWidthPix(int widthPix) {
@@ -54,9 +56,7 @@ public class GameBoard implements TickAware{
 					//vykresli
 					int viewportX=j*Tile.SIZE-shiftX;
 					int viewportY=i*Tile.SIZE;
-					if(drawTile(t)){
-						t.draw(g, viewportX,viewportY);
-					}
+					t.draw(g, viewportX,viewportY);
 					//otestujeme kolize dlazdice s ptakem
 					if (t instanceof WallTile) {
 						//je to zeï! Hurray!
@@ -67,7 +67,7 @@ public class GameBoard implements TickAware{
 					if (t instanceof BonusTile) {
 						//je to zeï! Hurray!
 						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
-							((BonusTile) t).setActive(false); //doslo ke kolizi, hra ma zkonèit
+							((BonusTile) t).setActive(false);
 						}
 					}
 				}
@@ -92,14 +92,6 @@ public class GameBoard implements TickAware{
 	
 	public void reset(){
 		gameOver = false;
-		bird = new Bird(100, 100);
-	}
-	
-	private boolean drawTile(Tile t){
-		if(!(t instanceof BonusTile) || (t instanceof BonusTile && ((BonusTile) t).isActive() == true)){
-			return true;
-		}else {
-			return false;
-		}
+		bird = new Bird(100, 100,imageOfTheBird);
 	}
 }

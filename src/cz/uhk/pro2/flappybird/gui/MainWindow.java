@@ -53,6 +53,12 @@ public class MainWindow extends JFrame {
 		pack();
 		gameBoard.setWidthPix(pnl.getWidth());
 
+
+		Timer t = new Timer(20, e -> {// jak èasto se timer spouští v ms
+			gameBoard.tick(x++);// promìná, která udržuje poèet tickù od zaèátku
+			pnl.repaint();// refresh obrazovky
+		});
+		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -60,17 +66,15 @@ public class MainWindow extends JFrame {
 					gameBoard.reset();
 					x = 0;
 				} else {
+					if(!t.isRunning()){
+						t.start();
+					}
 					gameBoard.kickTheBird();
 				}
 			}
 
 		});
 
-		Timer t = new Timer(20, e -> {// jak èasto se timer spouští v ms
-			gameBoard.tick(x++);// promìná, která udržuje poèet tickù od zaèátku
-			pnl.repaint();// refresh obrazovky
-		});
-		t.start();
 	}
 
 	public static void main(String[] args) {

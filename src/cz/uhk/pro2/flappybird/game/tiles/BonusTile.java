@@ -1,10 +1,13 @@
 package cz.uhk.pro2.flappybird.game.tiles;
 
+import java.awt.Graphics;
 import java.awt.Image;
 
+import cz.uhk.pro2.flappybird.game.Tile;
+
 public class BonusTile extends AbstractTile{
-	
 	private boolean active;
+	private Tile emptyTile;
 	
 	public boolean isActive(){
 		return active;
@@ -13,10 +16,20 @@ public class BonusTile extends AbstractTile{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public BonusTile(Image image) {
+	
+	public BonusTile(Image image, Tile emptyTile) {
 		super(image);
-		active = true;
+		this.active = true;
+		this.emptyTile = emptyTile;
 	}
 
+	@Override
+	public void draw(Graphics g, int x, int y){
+		if(active == false && emptyTile != null){
+			emptyTile.draw(g, x, y);
+		}else{
+			super.draw(g, x, y);
+		}
+	}
 
 }

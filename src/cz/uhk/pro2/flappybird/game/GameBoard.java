@@ -2,6 +2,7 @@ package cz.uhk.pro2.flappybird.game;
 
 import java.awt.*;
 
+import cz.uhk.pro2.flappybird.game.tiles.BonusTile;
 import cz.uhk.pro2.flappybird.game.tiles.WallTile;
 
 public class GameBoard implements TickAware{
@@ -53,12 +54,20 @@ public class GameBoard implements TickAware{
 					//vykresli
 					int viewportX=j*Tile.SIZE-shiftX;
 					int viewportY=i*Tile.SIZE;
-					t.draw(g, viewportX,viewportY);
+					if(drawTile(t)){
+						t.draw(g, viewportX,viewportY);
+					}
 					//otestujeme kolize dlazdice s ptakem
 					if (t instanceof WallTile) {
 						//je to zeï! Hurray!
 						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
 							gameOver = true; //doslo ke kolizi, hra ma zkonèit
+						}
+					}
+					if (t instanceof BonusTile) {
+						//je to zeï! Hurray!
+						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
+							((BonusTile) t).setActive(false); //doslo ke kolizi, hra ma zkonèit
 						}
 					}
 				}
@@ -75,8 +84,6 @@ public class GameBoard implements TickAware{
 		//s každým tikem ve høe posuneme hru o jeden pixel
 		//tj. poèet ticku a pixelu se rovnají
 		shiftX=(int)ticksSinceStart;
-		
-		//TODO dáme vìdìt ptákovi, že hodiny tickly
 		bird.tick(ticksSinceStart);
 		}else {
 			//hra stoji na miste
@@ -88,4 +95,11 @@ public class GameBoard implements TickAware{
 		bird = new Bird(100, 100);
 	}
 	
+	private boolean drawTile(Tile t){
+		if(!(t instanceof BonusTile) || (t instanceof BonusTile && ((BonusTile) t).isActive() == true)){
+			return true;
+		}else {
+			return false;
+		}
+	}
 }

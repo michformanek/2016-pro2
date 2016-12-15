@@ -16,32 +16,30 @@ import javax.imageio.ImageIO;
 
 import cz.uhk.pro2.flappybird.game.GameBoard;
 import cz.uhk.pro2.flappybird.game.Tile;
+import cz.uhk.pro2.flappybird.game.tiles.BonusTile;
 import cz.uhk.pro2.flappybird.game.tiles.EmptyTile;
 import cz.uhk.pro2.flappybird.game.tiles.WallTile;
 
 public class CsvBoardLoader implements BoardLoader {
 	// pomocny objekt pro zapisovani hlasek o prubehu programu
 	static final Logger logger = Logger.getLogger(CsvBoardLoader.class.getName());
-	
+
 	InputStream is; // stream, ze ktereho nacitame level
-	
+
 	public CsvBoardLoader(InputStream is) {
 		this.is = is;
 	}
 
 	@Override
 	public GameBoard getGameboard() {
-		try (BufferedReader br = 
-				new BufferedReader(
-						new InputStreamReader(is, "UTF-8"))
-				) {		
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
 			// radek s poctem typu dlazdic
 			String[] line = br.readLine().split(";");
 			int numberOfTypes = Integer.parseInt(line[0]);
-			//logger.log(Level.FINE, "Number of tile types: " + numberOfTypes);
+			// logger.log(Level.FINE, "Number of tile types: " + numberOfTypes);
 			System.out.println("Number of tile types: " + numberOfTypes);
 			// typy dlazdic
-			Map<String, Tile> tileTypes = new HashMap<>(); 
+			Map<String, Tile> tileTypes = new HashMap<>();
 			for (int i = 0; i < numberOfTypes; i++) {
 				line = br.readLine().split(";");
 				String type = line[0];
@@ -66,10 +64,11 @@ public class CsvBoardLoader implements BoardLoader {
 				line = br.readLine().split(";");
 				for (int j = 0; j < columns; j++) {
 					String t; // retezec v dane bunce
-					// osetrime pripad, ze by v CSV chybely prazdne bunky na konci radku
+					// osetrime pripad, ze by v CSV chybely prazdne bunky na
+					// konci radku
 					if (j < line.length) {
 						// v poradku, bunku mame v CSV
-						t = line[j];						
+						t = line[j];
 					} else {
 						// bunka v CSV chybi, povazujeme ji za prazdnou
 						t = "";
@@ -86,9 +85,8 @@ public class CsvBoardLoader implements BoardLoader {
 		}
 	}
 
-	private Tile createTile(String clazz, int spriteX, int spriteY, 
-			int spriteWidth, int spriteHeight, 
-			String url) throws IOException {
+	private Tile createTile(String clazz, int spriteX, int spriteY, int spriteWidth, int spriteHeight, String url)
+			throws IOException {
 		// nacist obrazek z URL
 		BufferedImage originalImage = ImageIO.read(new URL(url));
 		// vyriznout z obrazku sprite podle x,y, a sirka vyska
@@ -96,16 +94,16 @@ public class CsvBoardLoader implements BoardLoader {
 		// zvetsime/zmensime sprite tak, aby pasoval do naseho rozmeru dlazdice
 		BufferedImage resizedImage = new BufferedImage(Tile.SIZE, Tile.SIZE, BufferedImage.TYPE_INT_ARGB);
 		// TODO nastavit parametry pro scaling
-		Graphics2D g = (Graphics2D)resizedImage.getGraphics();
+		Graphics2D g = (Graphics2D) resizedImage.getGraphics();
 		g.drawImage(croppedImage, 0, 0, Tile.SIZE, Tile.SIZE, null);
 		// podle typu (clazz) vytvorime instanci patricne tridy
 		switch (clazz) {
 		case "Wall":
 			return new WallTile(resizedImage);
 		case "Bonus":
-			return new WallTile(resizedImage); // TODO dodelat dlazdici typu bonus
+			return new BonusTile(resizedImage);
 		case "Empty":
-			return new EmptyTile(resizedImage);  
+			return new EmptyTile(resizedImage);
 		default:
 			throw new RuntimeException("Neznama trida dlazdice " + clazz);
 		}

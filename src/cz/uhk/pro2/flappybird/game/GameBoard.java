@@ -9,7 +9,7 @@ public class GameBoard implements TickAware{
 	Tile[][] tiles;//matice dlazdic na herni plose
 	int shiftX; // o kolik pixelu se svet posunul
 	int widthPix;//sirka hraci plochy
-	Bird bird; //herní pták
+	Bird bird; //hernï¿½ ptï¿½k
 	boolean gameOver; //true pokud doslo ke kolizi a hra ma skoncit
 	Image imageOfTheBird;
 	
@@ -18,7 +18,7 @@ public class GameBoard implements TickAware{
 		tiles = new Tile[20][20];
 		//tiles[2][1] =new WallTile();
 		
-		bird = new Bird(100, 100,imageOfTheBird); //TODO umístit do støedu okna?
+		bird = new Bird(100, 100,imageOfTheBird); //TODO umï¿½stit do stï¿½edu okna?
 	}
 	
 	public GameBoard(final Tile[][] tiles, Image imageOfTheBird){
@@ -48,7 +48,7 @@ public class GameBoard implements TickAware{
 		//i je cislo radku
 		for (int i=0;i<tiles.length;i++){
 			for(int j=minJ;j<countJ+minJ;j++){
-				 //aby level bìzìl poøád dokola, j se na konci pole vrací na 0; tiles0 je pocet sloupcù
+				 //aby level bï¿½zï¿½l poï¿½ï¿½d dokola, j se na konci pole vracï¿½ na 0; tiles0 je pocet sloupcï¿½
 				int modJ = j% tiles[0].length;
 				Tile t =  tiles[i][modJ];
 				if(t!=null){
@@ -56,16 +56,19 @@ public class GameBoard implements TickAware{
 					//vykresli
 					int viewportX=j*Tile.SIZE-shiftX;
 					int viewportY=i*Tile.SIZE;
+					if(t instanceof BonusTile && j == (countJ + minJ - 2)  ) {
+						((BonusTile) t).setActive(true);
+					}
 					t.draw(g, viewportX,viewportY);
 					//otestujeme kolize dlazdice s ptakem
 					if (t instanceof WallTile) {
-						//je to zeï! Hurray!
+						//je to zeï¿½! Hurray!
 						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
-							gameOver = true; //doslo ke kolizi, hra ma zkonèit
+							gameOver = true; //doslo ke kolizi, hra ma zkonï¿½it
 						}
 					}
 					if (t instanceof BonusTile) {
-						//je to zeï! Hurray!
+						//je to zeï¿½! Hurray!
 						if (bird.collidesWithRectangle(viewportX, viewportY, Tile.SIZE, Tile.SIZE)) {
 							((BonusTile) t).setActive(false);
 						}
@@ -81,8 +84,8 @@ public class GameBoard implements TickAware{
 	@Override
 	public void tick(long ticksSinceStart) {
 		if(!gameOver){
-		//s každým tikem ve høe posuneme hru o jeden pixel
-		//tj. poèet ticku a pixelu se rovnají
+		//s kaï¿½dï¿½m tikem ve hï¿½e posuneme hru o jeden pixel
+		//tj. poï¿½et ticku a pixelu se rovnajï¿½
 		shiftX=(int)ticksSinceStart;
 		bird.tick(ticksSinceStart);
 		}else {

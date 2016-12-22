@@ -77,9 +77,13 @@ public class CsvBoardLoader implements BoardLoader {
 					if (j < line.length) {
 						// v poradku, bunku mame v CSV
 						t = line[j];
-					} else {
-						// bunka v CSV chybi, povazujeme ji za prazdnou
-						t = "";
+						if ("B".equals(t)) {
+							tiles[i][j] = ((BonusTile) tileTypes.get("B")).clone();
+							continue;
+						}
+					}
+					else{
+						t="";
 					}
 					tiles[i][j] = tileTypes.get(t);
 				}

@@ -8,10 +8,6 @@ import cz.uhk.pro2.flappybird.game.Tile;
 public class BonusTile extends AbstractTile{
 	private boolean active;
 	private Tile emptyTile;
-	
-	public boolean isActive(){
-		return active;
-	}
 
 	public void setActive(boolean active) {
 		this.active = active;
@@ -30,6 +26,11 @@ public class BonusTile extends AbstractTile{
 		}else{
 			super.draw(g, x, y);
 		}
+	}
+
+	@Override
+	public BonusTile clone(){
+		return new BonusTile(image,emptyTile);
 	}
 
 }

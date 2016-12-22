@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public MainWindow() {
-		try (InputStream inputStream = new FileInputStream("level.csv")) {
+		try (InputStream inputStream = new FileInputStream("/home/mformanek/2016-pro2/2016-pro2/level.csv")) {
 			BoardLoader boardLoader = new CsvBoardLoader(inputStream);
 			gameBoard = boardLoader.getGameboard();
 		} catch (FileNotFoundException e1) {
@@ -54,8 +54,8 @@ public class MainWindow extends JFrame {
 		gameBoard.setWidthPix(pnl.getWidth());
 
 
-		Timer t = new Timer(20, e -> {// jak èasto se timer spouští v ms
-			gameBoard.tick(x++);// promìná, která udržuje poèet tickù od zaèátku
+		Timer t = new Timer(20, e -> {// jak ï¿½asto se timer spouï¿½tï¿½ v ms
+			gameBoard.tick(x++);// promï¿½nï¿½, kterï¿½ udrï¿½uje poï¿½et tickï¿½ od zaï¿½ï¿½tku
 			pnl.repaint();// refresh obrazovky
 		});
 		
@@ -78,7 +78,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// díky swingUtilities jede gui ve vlastním vláknu
+		// dï¿½ky swingUtilities jede gui ve vlastnï¿½m vlï¿½knu
 		SwingUtilities.invokeLater(() -> {
 			MainWindow w = new MainWindow();
 			w.setVisible(true);
